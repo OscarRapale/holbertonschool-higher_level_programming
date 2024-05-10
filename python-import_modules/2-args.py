@@ -1,7 +1,8 @@
 #!/usr/bin/python3
-import sys
 
 if __name__ == "__main__":
+
+    import sys
 
     num_args = len(sys.argv) - 1
 
@@ -14,5 +15,5 @@ if __name__ == "__main__":
     else:
         print(f"{num_args} arguments:")
 
-    for i in range(1, len(sys.argv)):
-        print(sys.argv[i])
+    for i, arg in enumerate(sys.argv[1:], start=1):
+        print(f"{i}: {arg}")
