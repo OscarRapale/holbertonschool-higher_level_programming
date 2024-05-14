@@ -6,6 +6,6 @@ def uniq_add(my_list=[]):
 
     for element in my_list:
         unique_int.add(element)
-        result = sum(unique_int)
+        total = sum(unique_int)
 
-    return result
+    return total
