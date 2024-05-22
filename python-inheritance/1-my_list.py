@@ -5,9 +5,8 @@ contains the MyList class
 
 
 class MyList(list):
-    """a subclass of list"""
-    pass
+    """A subclass of list with a method to print the list sorted in ascending order."""
 
     def print_sorted(self):
-        """prints the sorted list"""
-        print(sorted(list(self)))
+        """Prints the list sorted in ascending order."""
+        print(sorted(self))
