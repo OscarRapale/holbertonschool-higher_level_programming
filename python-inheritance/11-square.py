@@ -1,5 +1,7 @@
+
 #!/usr/bin/python3
-"""10-square.py
+"""
+Defines a class Square that inherits from Rectangle.
 """
 
 
@@ -24,5 +26,7 @@ class Square(Rectangle):
         return super().area()
 
     def __str__(self):
-        """ print(self) method """
-        return '[Square] {:d}/{:d}'.format(self.__size, self.__size)
+        """Return the print() and str() representation of a Square."""
+        rectangle_str = super().__str__()
+        square_str =  rectangle_str.replace("Rectangle", "Square")
+        return square_str
