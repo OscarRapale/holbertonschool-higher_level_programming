@@ -27,5 +27,5 @@ class Square(Rectangle):
     def __str__(self):
         """Return the print() and str() representation of a Square."""
         rectangle_str = super().__str__()
-        square_str =  rectangle_str.replace("Rectangle", "Square")
+        square_str = rectangle_str.replace("Rectangle", "Square")
         return square_str
