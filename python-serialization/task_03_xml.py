@@ -56,3 +56,22 @@ def convert_str(s):
                 return False
             else:
                 return s
+
+
+if __name__ == "__main__":
+    # Sample Test
+    sample_dict = {
+        'name': 'John',
+        'age': '28',
+        'city': 'New York'
+    }
+
+    xml_file = "data.xml"
+    if serialize_to_xml(sample_dict, xml_file):
+        print(f"Dictionary serialized to {xml_file}")
+
+        deserialized_data = deserialize_from_xml(xml_file)
+        print("\nDeserialized Data:")
+        print(deserialized_data)
+    else:
+        print(f"Failed to serialize the dictionary to {xml_file}")
