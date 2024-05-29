@@ -3,75 +3,49 @@ import xml.etree.ElementTree as ET
 
 def serialize_to_xml(dictionary, filename):
     """
-    Serializes a dictionary into XML and saves it to a file.
+    Serialize a Python dictionary into XML and save it to the given filename.
 
     Parameters:
-    dictionary (dict): The dictionary to serialize.
-    filename (str): The name of the file to save the XML data to.
+    - dictionary (dict): The dictionary to serialize.
+    - filename (str): The name of the file to save the serialized XML data.
     """
-    root = ET.Element("data")
-    for key, value in dictionary.items():
-        element = ET.SubElement(root, key)
-        element.text = str(value)
+    try:
+        root = ET.Element("data")
+        for key, value in dictionary.items():
+            child = ET.SubElement(root, key)
+            child.text = str(value)
+        tree = ET.ElementTree(root)
+        tree.write(filename)
+
+        return True
+
+    except Exception as e:
+        print(f"An error occurred during serialization: {e}")
+        return False
 
 
 def deserialize_from_xml(filename):
     """
-    Reads XML data from a file and deserializes it into a dictionary.
+    Read XML data from a file and return a deserialized Python dictionary.
 
     Parameters:
-    filename (str): The name of the file to read the XML data from.
+    - filename (str): The name of the file to read the XML data from.
 
     Returns:
-    dict: The deserialized dictionary.
-    """
-    tree = ET.parse(filename)
-    root = tree.getroot()
-    dictionary = {}
-    for child in root:
-        dictionary[child.tag] = convert_str(child.text)
-    return dictionary
-
-
-def convert_str(s):
-    """
-    Tries to convert a string to an integer, a float, or a boolean.
-    If all conversions fail, returns the original string.
-
-    Parameters:
-    s (str): The string to convert.
-
-    Returns:
-    int/float/bool/str: The converted value.
+    - dict: The deserialized dictionary, or None if an error occurs.
     """
     try:
-        return int(s)
-    except ValueError:
-        try:
-            return float(s)
-        except ValueError:
-            if s.lower() == 'true':
-                return True
-            elif s.lower() == 'false':
-                return False
-            else:
-                return s
+        tree = ET.parse(filename)
+        root = tree.getroot()
 
+        dictionary = {child.tag: child.text for child in root}
 
-if __name__ == "__main__":
-    # Sample Test
-    sample_dict = {
-        'name': 'John',
-        'age': '28',
-        'city': 'New York'
-    }
+        return dictionary
 
-    xml_file = "data.xml"
-    if serialize_to_xml(sample_dict, xml_file):
-        print(f"Dictionary serialized to {xml_file}")
+    except FileNotFoundError:
+        print(f"Error: The file {filename} was not found.")
+        return None
 
-        deserialized_data = deserialize_from_xml(xml_file)
-        print("\nDeserialized Data:")
-        print(deserialized_data)
-    else:
-        print(f"Failed to serialize the dictionary to {xml_file}")
+    except Exception as e:
+        print(f"An error occurred during deserialization: {e}")
+        return None
