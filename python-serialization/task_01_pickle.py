@@ -1,8 +1,10 @@
 import pickle
 
+
 class CustomObject:
     """
-    A custom Python class that represents an object with a name, age, and student status.
+    A custom Python class that represents an object with a:
+    name, age, and student status.
 
     Attributes:
     name (str): The name of the object.
