@@ -2,6 +2,8 @@ import http.server
 import json
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
 class MyHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     """
     HTTP request handler class that handles GET requests for '/' ,'/data', '/status', '/info' and undefined endpoints.
@@ -42,13 +44,14 @@ class MyHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             self.send_response(404)
             self.send_header('Content-type', 'text/plain')
             self.end_headers()
-            self.wfile.write(b'Endpoint not found')
+            response = b'Endpoint not found'
+            logging.info(f"Response for undefined endpoint: {response}")
+            self.wfile.write(response)
 
 def run(server_class=http.server.HTTPServer, handler_class=MyHTTPRequestHandler):
     """
     Starts the HTTP server with the specified server class and request handler class.
     """
-    logging.basicConfig(level=logging.INFO)
     server_address = ('', 8000)
     httpd = server_class(server_address, handler_class)
     logging.info("Starting server on port 8000...")
