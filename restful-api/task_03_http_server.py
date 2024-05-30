@@ -7,42 +7,36 @@ class MyHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     HTTP request handler class that handles GET requests for '/' ,'/data', '/status', '/info' and undefined endpoints.
     """
 
+    def _set_headers(self, status_code, content_type):
+        self.send_response(status_code)
+        self.send_header('Content-type', content_type)
+        self.end_headers()
+
+    def _respond(self, content, content_type='text/plain', status_code=200):
+        self._set_headers(status_code, content_type)
+        self.wfile.write(content)
+
     def do_GET(self):
         """
         Handles GET requests. Responds with JSON data for '/data' and '/info' endpoints,
         'OK' for '/status' endpoint, and 'Not Found' for undefined endpoints.
         """
         if self.path == '/':
-            self.send_response(200)
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
-            self.wfile.write(b'Hello, this is a simple API!')
+            self._respond(b'Hello, this is a simple API!')
 
         elif self.path == '/data':
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
             data = {"name": "John", "age": 30, "city": "New York"}
-            self.wfile.write(json.dumps(data).encode())
+            self._respond(json.dumps(data).encode(), content_type='application/json')
 
         elif self.path == '/status':
-            self.send_response(200)
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
-            self.wfile.write(b'OK')
+            self._respond(b'OK')
 
         elif self.path == '/info':
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.end_headers()
             info = {"version": "1.0", "description": "A simple API built with http.server"}
-            self.wfile.write(json.dumps(info).encode())
+            self._respond(json.dumps(info).encode(), content_type='application/json')
 
         else:
-            self.send_response(404, 'Not Found')
-            self.send_header('Content-type', 'text/plain')
-            self.end_headers()
-            self.wfile.write(b"Endpoint not found")
+            self._respond(b"Endpoint not found", status_code=404)
 
 def run(server_class=http.server.HTTPServer, handler_class=MyHTTPRequestHandler):
     """
@@ -56,8 +50,11 @@ def run(server_class=http.server.HTTPServer, handler_class=MyHTTPRequestHandler)
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
-    httpd.server_close()
-    logging.info("Stopping server.")
+    except Exception as e:
+        logging.error(f"Server error: {e}")
+    finally:
+        httpd.server_close()
+        logging.info("Stopping server.")
 
 if __name__ == '__main__':
     run()
