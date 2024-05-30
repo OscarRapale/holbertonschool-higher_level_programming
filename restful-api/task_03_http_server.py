@@ -36,7 +36,7 @@ class MyHTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             self._respond(json.dumps(info).encode(), content_type='application/json')
 
         else:
-            self._respond(b"", status_code=404)
+            self._respond(b"Endpoint not found", status_code=404)
 
 def run(server_class=http.server.HTTPServer, handler_class=MyHTTPRequestHandler):
     """
