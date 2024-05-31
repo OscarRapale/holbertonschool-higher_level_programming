@@ -7,7 +7,7 @@ def home():
     """
     Home route that returns a welcome message.
     """
-    return "Welcome to the flask API!"
+    return "Welcome to the Flask API!"
 
 users = {"jane": {"username": "jane", "name": "Jane", "age": 28, "city": "Los Angeles"},
          "john": {"username": "john", "name": "John", "age": 30, "city": "New York"}}
@@ -26,7 +26,7 @@ def status():
     """
     return "OK"
 
-@app.route("/user/<username>")
+@app.route("/users/<username>")
 def user(username):
     """
     User route that returns the user with the given username.
@@ -35,7 +35,7 @@ def user(username):
     if username in users:
         return jsonify(users[username])
     else:
-        return "User not found", 404
+        return "error: User not found", 404
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
@@ -43,9 +43,16 @@ def add_user():
     Add User route that accepts POST requests to add a new user.
     The new user's data is expected to be provided in the request body as JSON.
     """
-    user = request.get_json()
-    users[user["username"]] = user
-    return jsonify(user)
+    new_user = request.json
+    username = new_user.get("username")
+    if not username:
+        return jsonify({"error": "Username is required"}), 400
+
+    if username == users:
+        return jsonify({"error": "User already exists"}), 400
+
+    users[username] = new_user
+    return jsonify({"message": "User added", "user": new_user}), 201
 
 if __name__ == "__main__":
     app.run()
