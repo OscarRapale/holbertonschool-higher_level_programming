@@ -17,7 +17,7 @@ def data():
     """
     Data route that returns all users.
     """
-    return jsonify(users)
+    return jsonify(list(users.keys()))
 
 @app.route("/status")
 def status():
@@ -32,10 +32,11 @@ def user(username):
     User route that returns the user with the given username.
     If the user does not exist, it returns a 404 status code.
     """
-    if username in users:
-        return jsonify(users[username])
+    user = users.get(username)
+    if user:
+        return jsonify(user)
     else:
-        return "error: User not found", 404
+        return jsonify({"error": "User not found"}), 404
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
