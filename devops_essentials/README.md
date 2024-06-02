@@ -1,2 +1,2 @@
-Containerization and Orchestration Essentials Project
+Containerization and Orchestration Essentials
 
