@@ -1,24 +1,20 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
+# Use an official Node.js runtime as a parent image
+FROM node:14
 
-# Set the working directory in the container
+# Set the working directory in the container to /app
 WORKDIR /app
 
-# Copy the requirements file into the container at /app
-COPY requirements.txt .
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# Install any dependencies specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Install any needed packages specified in package.json
+RUN npm install
 
-# Copy the rest of the application's code to the container
+# Bundle app source inside the Docker image 
 COPY . .
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
 
-# Define environment variable
-ENV FLASK_APP=app.py
-
-# Run the application
-CMD ["flask", "run", "--host=0.0.0.0"]
-
+# Run the app when the container launches
+CMD [ "node", "server.js" ]
