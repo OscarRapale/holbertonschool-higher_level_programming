@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" 
+"""
 prints the first State object from the database hbtn_0e_6_usa
 """
 from sys import argv
@@ -15,8 +15,8 @@ if __name__ == "__main__":
 
     Session = sessionmaker(bind=engine)
     session = Session()
-    for instance in session.query(State).first():
-        if instance is None:
-            print("Nothing")
-        else:
-            print(instance.id, instance.name, sep=": ")
+    instance = session.query(State).first()
+    if instance is None:
+        print("Nothing")
+    else:
+        print(instance.id, instance.name, sep=": ")
