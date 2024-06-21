@@ -4,7 +4,6 @@ Contains State class and Base, an instance of declarative_base()
 """
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sys import argv
 
 Base = declarative_base()
 
