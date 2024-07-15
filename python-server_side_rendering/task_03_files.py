@@ -27,30 +27,39 @@ def items():
 
     return render_template('items.html', items=items_list)
 
-def read_json():
-    with open('products.json') as f:
-        return json.load(f)
+def read_json(file_path):
+    with open(file_path, 'r') as file:
+        return json.load(file)
 
-def read_csv():
-    with open('products.csv', newline='') as f:
-        return list(csv.DictReader(f))
+def read_csv(file_path):
+    products = []
+    with open(file_path, 'r') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            row['id'] = int(row['id'])
+            row['price'] = float(row['price'])
+            products.append(row)
+    return products
 
 @app.route('/products')
 def products():
     source = request.args.get('source')
-    id = request.args.get('id')
+    product_id = request.args.get('id')
+
+    if source not in ['json', 'csv']:
+        return render_template('product_display.html', error="Wrong source")
 
     if source == 'json':
-        products = read_json()
-    elif source == 'csv':
-        products = read_csv()
+        products = read_json('products.json')
     else:
-        return render_template('product_display.html', error='Wrong source')
+        products = read_csv('products.csv')
 
-    if id is not None:
-        products = [product for product in products if product['id'] == id]
-        if not products:
-            return render_template('product_display.html', error='Product not found')
+    if product_id:
+        product_id = int(product_id)
+        filtered_products = [product for product in products if product['id'] == product_id]
+        if not filtered_products:
+            return render_template('product_display.html', error="Product not found")
+        products = filtered_products
 
     return render_template('product_display.html', products=products)
 
