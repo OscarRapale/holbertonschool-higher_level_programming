@@ -29,13 +29,14 @@ def generate_invitations(template, attendees):
 
     for index, attendee in enumerate(attendees, start=1):
         attendee = attendee.copy()
-        if 'event_date' not in attendee:
-            print("Warning: Replacing missing data 'event_date' with 'N/A'.")
-            attendee['event_date'] = "N/A"
+        missing_keys = [key for key in ['event_date', 'event_location', 'event_title'] if key not in attendee]
+        for key in missing_keys:
+            print(f"Warning: Replacing missing data '{key}' with 'N/A'.")
+            attendee[key] = "N/A"
         try:
             invitation = template.format(**attendee)
         except KeyError as e:
-            print(f"Warning: Replacing missing data {e} with 'N/A'.")
+            print(f"Warning: Unexpected missing data {e}")
             attendee[str(e)] = "N/A"
             invitation = template.format(**attendee)
         with open(f"output_{index}.txt", "w") as file:
