@@ -1,16 +1,10 @@
 from flask import Flask, render_template
 
-app = Flask(__name__, template_folder='template')
+app = Flask(__name__)
 
 @app.route('/')
 def home():
-    data = {
-        "title": "My Flask App",
-        "heading": "Welcome to My Flask App",
-        "paragraph": "This is a simple Flask application.",
-        "items": ["Flask", "HTML", "Templates"]
-    }
-    return render_template('index.html', **data)
+    return render_template('index.html')
 
 @app.route('/about')
 def about():
