@@ -28,6 +28,10 @@ def generate_invitations(template, attendees):
         return
 
     for index, attendee in enumerate(attendees, start=1):
+        attendee = attendee.copy()
+        if 'event_date' not in attendee:
+            print("Warning: Replacing missing data 'event_date' with 'N/A'.")
+            attendee['event_date'] = "N/A"
         try:
             invitation = template.format(**attendee)
         except KeyError as e:
